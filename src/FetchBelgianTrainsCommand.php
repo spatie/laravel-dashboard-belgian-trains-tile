@@ -1,6 +1,7 @@
 <?php
 
 namespace Spatie\BelgianTrainsTile;
+
 use Illuminate\Console\Command;
 
 class FetchBelgianTrainsCommand extends Command

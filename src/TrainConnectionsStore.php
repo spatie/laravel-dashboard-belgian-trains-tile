@@ -1,6 +1,7 @@
 <?php
 
 namespace Spatie\BelgianTrainsTile;
+
 use Spatie\Dashboard\Models\Tile;
 
 class TrainConnectionsStore
