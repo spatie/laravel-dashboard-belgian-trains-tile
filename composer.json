@@ -1,11 +1,11 @@
 {
-    "name": "spatie/laravel-dashboard-calendar-tile",
-    "description": "A calendar tile for Laravel Dashboard",
+    "name": "spatie/laravel-dashboard-belgian-trains-tile",
+    "description": "A tile for Laravel Dashboard that display Belgian train connections",
     "keywords": [
         "spatie",
         "laravel-dashboard-calendar-tile"
     ],
-    "homepage": "https://github.com/spatie/laravel-dashboard-calendar-tile",
+    "homepage": "https://github.com/spatie/laravel-dashboard-belgian-trails-tile",
     "license": "MIT",
     "authors": [
         {
@@ -17,20 +17,19 @@
     ],
     "require": {
         "php": "^7.4",
-        "spatie/laravel-dashboard": "dev-master",
-        "spatie/laravel-google-calendar": "^2.5"
+        "spatie/laravel-dashboard": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\CalendarTile\\": "src"
+            "Spatie\\BelgianTrainsTile\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\CalendarTile\\Tests\\": "tests"
+            "Spatie\\BelgianTrainsTile\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -44,7 +43,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\CalendarTile\\CalendarTileServiceProvider"
+                "Spatie\\BelgianTrainsTile\\BelgianTrainsTileServiceProvider"
             ]
         }
     },

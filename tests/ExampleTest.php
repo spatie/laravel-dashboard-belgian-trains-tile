@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\CalendarTile\Tests;
+namespace Spatie\BelgianTrainsTile\Tests;
 
 use PHPUnit\Framework\TestCase;
 

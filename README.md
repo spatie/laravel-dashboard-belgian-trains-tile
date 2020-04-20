@@ -24,8 +24,8 @@ composer require spatie/laravel-dashboard-calendar-tile
 ## Usage
 
 ``` php
-$CalendarTile = new Spatie\CalendarTile();
-echo $CalendarTile->echoPhrase('Hello, Spatie!');
+$BelgianTrainsTile = new Spatie\BelgianTrainsTile();
+echo $BelgianTrainsTile->echoPhrase('Hello, Spatie!');
 ```
 
 ## Testing
