@@ -13,7 +13,7 @@ class BelgianTrainsTileServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                FetchBelgianTrainsCommand::class
+                FetchBelgianTrainsCommand::class,
             ]);
         }
 
