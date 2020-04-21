@@ -14,62 +14,9 @@ We invest a lot of resources into creating [best in class open source packages](
 
 We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
-## Installation
+## Documentation
 
-You can install the package via composer:
-
-```bash
-composer require spatie/laravel-belgian-trains-tile
-```
-
-In the `dashboard` config file, you must add this configuration in the `tiles` key. The value `belgian_trains` should be an array of which each value is array with keys `departure`, `destination` and `label`
-
-```php
-// in config/dashboard.php
-
-return [
-    // ...
-    'tiles' => [
-        'belgian_trains' => [
-            [
-                'departure' => 'Antwerpen-Centraal',
-                'destination' => 'Gent-Dampoort',
-                'label' => 'Gent',
-            ],
-        ],
-    ],
-];
-```
-
-In `app\Console\Kernel.php` you should schedule the `Spatie\BelgianTrainsTile\FetchBelgianTrainsCommand` to run. You can let in run every minute if you want. You could also run is less frequently if you fast updates on the dashboard aren't that important for this tile.
-
-```php
-// in app/console/Kernel.php
-
-protected function schedule(Schedule $schedule)
-{
-    // ...
-    $schedule->command(Spatie\BelgianTrainsTile\FetchBelgianTrainsCommand::class)->everyMinute();
-}
-```
-
-## Usage
-
-In your dashboard view you use the `livewire:velo-tile` component. 
-
-```html
-<x-dashboard>
-    <livewire:belgian-trains-tile position="a1:a3" />
-</x-dashboard>
-```
-
-### Customizing the view
-
-If you want to customize the view used to render this tile, run this command:
-
-```bash
-php artisan vendor:publish --provider="Spatie\BelgianTrainsTile\BelgianTrainsTileServiceProvider" --tag="dashboard-belgian-trains-tile-views"
-```
+All documentation is available [on our documentation site](https://docs.spatie.be/laravel-dashboard/v1/adding-tiles/belgian-trains).
 
 ## Testing
 
