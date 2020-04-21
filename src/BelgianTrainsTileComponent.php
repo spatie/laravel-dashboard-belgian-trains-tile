@@ -19,7 +19,7 @@ class BelgianTrainsTileComponent extends Component
     public function render()
     {
         $showTile = isset(static::$showTile)
-            ? (static::$showTile)
+            ? (static::$showTile)()
             : true;
 
         return view('dashboard-belgian-trains-tile::tile', [
