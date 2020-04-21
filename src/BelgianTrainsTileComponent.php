@@ -6,6 +6,8 @@ use Livewire\Component;
 
 class BelgianTrainsTileComponent extends Component
 {
+    protected static $showTile = null;
+
     /** @var string */
     public $position;
 
@@ -16,9 +18,18 @@ class BelgianTrainsTileComponent extends Component
 
     public function render()
     {
+        $showTile = isset(static::$showTile)
+            ? (static::$showTile)
+            : true;
+
         return view('dashboard-belgian-trains-tile::tile', [
-            'showTile' => true,
+            'showTile' => $showTile,
             'trainConnections' => TrainConnectionsStore::make()->trainConnections(),
         ]);
+    }
+
+    public static function showTile(callable $callable): void
+    {
+        static::$showTile = $callable;
     }
 }

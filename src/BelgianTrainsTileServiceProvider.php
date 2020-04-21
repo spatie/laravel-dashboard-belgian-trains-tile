@@ -17,6 +17,10 @@ class BelgianTrainsTileServiceProvider extends ServiceProvider
             ]);
         }
 
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/dashboard-belgian-trains-tile'),
+        ], 'dashboard-belgian-trains-tile-views');
+
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'dashboard-belgian-trains-tile');
     }
 }
