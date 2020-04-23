@@ -8,7 +8,7 @@
                 🚃
             </div>
         </div>
-        <div class="self-center | grid gap-8" style="grid-auto-rows: auto;">
+        <div wire:poll.{{ $refreshIntervalInSeconds }}s  class="self-center | grid gap-8" style="grid-auto-rows: auto;">
             @foreach($trainConnections as $trainConnection)
                 <div class="grid gap-2">
                     <h2 class="uppercase">

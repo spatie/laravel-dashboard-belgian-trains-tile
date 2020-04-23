@@ -25,6 +25,7 @@ class BelgianTrainsTileComponent extends Component
         return view('dashboard-belgian-trains-tile::tile', [
             'showTile' => $showTile,
             'trainConnections' => TrainConnectionsStore::make()->trainConnections(),
+            'refreshIntervalInSeconds' => config('dashboard.tiles.belgian_trains.refresh_interval_in_seconds') ?? 60
         ]);
     }
 
