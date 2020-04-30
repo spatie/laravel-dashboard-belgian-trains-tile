@@ -6,8 +6,6 @@
 
 This tile can used on the [Laravel Dashboard](https://github.com/spatie/laravel-dashboard) to display the status of Velo, the Antwerp bike sharing system
 
-![screenshot](TODO: add link)
-
 ## Support us
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us). 
