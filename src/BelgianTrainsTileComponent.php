@@ -8,14 +8,6 @@ class BelgianTrainsTileComponent extends Component
 {
     protected static $showTile = null;
 
-    /** @var string */
-    public $position;
-
-    public function mount(string $position)
-    {
-        $this->position = $position;
-    }
-
     public function render()
     {
         $showTile = isset(static::$showTile)
