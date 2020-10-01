@@ -8,6 +8,8 @@ class BelgianTrainsTileComponent extends Component
 {
     protected static $showTile = null;
 
+    public $position;
+
     public function render()
     {
         $showTile = isset(static::$showTile)
