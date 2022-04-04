@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Http;
 
 class IRailApi
 {
-    public function getConnections(string $departureStationName, string $destinationStationName): array
+    public function getConnections(string $departureStationName, string $destinationStationName, string $locale): array
     {
-        $endpoint = "https://api.irail.be/connections?from={$departureStationName}&to={$destinationStationName}&format=json&lang=nl";
+        $endpoint = "https://api.irail.be/connections?from={$departureStationName}&to={$destinationStationName}&format=json&lang={$locale}";
 
         $response = Http::get($endpoint)->json();
 

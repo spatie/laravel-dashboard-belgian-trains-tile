@@ -14,9 +14,11 @@ class FetchBelgianTrainsCommand extends Command
     {
         $this->info('Fetching trainConnections from iRail...');
 
+        $locale = config('dashboard.tiles.belgian_trains.locale') ?? 'nl';
+
         $trainConnections = collect(config('dashboard.tiles.belgian_trains.connections') ?? [])
-            ->map(function (array $connection) use ($iRail) {
-                $trains = $iRail->getConnections($connection['departure'], $connection['destination']);
+            ->map(function (array $connection) use ($locale, $iRail) {
+                $trains = $iRail->getConnections($connection['departure'], $connection['destination'], $locale);
 
                 return ['label' => $connection['label'], 'trains' => $trains];
             })
