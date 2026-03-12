@@ -2,12 +2,13 @@
 
 namespace Spatie\BelgianTrainsTile;
 
+use Closure;
 use Illuminate\Contracts\View\View;
 use Spatie\Dashboard\Components\BaseTileComponent;
 
 class BelgianTrainsTileComponent extends BaseTileComponent
 {
-    protected static $showTile = null;
+    protected static ?Closure $showTile = null;
 
     public function render(): View
     {
