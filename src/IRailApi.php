@@ -12,7 +12,7 @@ class IRailApi
 
         $response = Http::get($endpoint)->json();
 
-        $connections = $response['connection'];
+        $connections = $response['connection'] ?? [];
 
         return collect($connections)
             ->map(function (array $connection) {

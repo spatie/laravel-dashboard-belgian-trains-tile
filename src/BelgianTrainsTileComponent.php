@@ -2,15 +2,15 @@
 
 namespace Spatie\BelgianTrainsTile;
 
-use Livewire\Component;
+use Closure;
+use Illuminate\Contracts\View\View;
+use Spatie\Dashboard\Components\BaseTileComponent;
 
-class BelgianTrainsTileComponent extends Component
+class BelgianTrainsTileComponent extends BaseTileComponent
 {
-    protected static $showTile = null;
+    protected static ?Closure $showTile = null;
 
-    public $position;
-
-    public function render()
+    public function render(): View
     {
         $showTile = isset(static::$showTile)
             ? (static::$showTile)()

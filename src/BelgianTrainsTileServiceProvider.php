@@ -7,7 +7,7 @@ use Livewire\Livewire;
 
 class BelgianTrainsTileServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         Livewire::component('belgian-trains-tile', BelgianTrainsTileComponent::class);
 
