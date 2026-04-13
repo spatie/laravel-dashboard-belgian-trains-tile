@@ -18,7 +18,12 @@ class FetchBelgianTrainsCommand extends Command
 
         $trainConnections = collect(config('dashboard.tiles.belgian_trains.connections') ?? [])
             ->map(function (array $connection) use ($locale, $iRail) {
-                $trains = $iRail->getConnections($connection['departure'], $connection['destination'], $locale);
+                $trains = $iRail->getConnections(
+                    $connection['departure'],
+                    $connection['destination'],
+                    $locale,
+                    $connection['label'] ?? null,
+                );
 
                 return ['label' => $connection['label'], 'trains' => $trains];
             })

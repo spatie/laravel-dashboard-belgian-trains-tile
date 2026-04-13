@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Http;
+use Spatie\BelgianTrainsTile\Exceptions\InvalidIRailResponse;
 use Spatie\BelgianTrainsTile\IRailApi;
 
 beforeEach(function () {
@@ -62,6 +64,8 @@ it('returns empty array for empty connection list', function () {
 });
 
 it('returns empty array when connection key is missing', function () {
+    Exceptions::fake();
+
     Http::fake([
         'api.irail.be/*' => Http::response(['timestamp' => '123']),
     ]);
@@ -69,6 +73,11 @@ it('returns empty array when connection key is missing', function () {
     $connections = $this->api->getConnections('A', 'B', 'nl');
 
     expect($connections)->toBe([]);
+
+    Exceptions::assertReported(function (InvalidIRailResponse $exception) {
+        return $exception->context()['departure_station'] === 'A'
+            && $exception->context()['destination_station'] === 'B';
+    });
 });
 
 it('converts delay from seconds to minutes', function () {
@@ -91,4 +100,55 @@ it('converts delay from seconds to minutes', function () {
     $connections = $this->api->getConnections('A', 'B', 'nl');
 
     expect($connections[0]['delay'])->toBe(12);
+});
+
+it('returns an empty array and reports when the response body is invalid', function () {
+    Exceptions::fake();
+
+    Http::fake([
+        'api.irail.be/*' => Http::response('not valid json', 200),
+    ]);
+
+    $connections = $this->api->getConnections('A', 'B', 'nl');
+
+    expect($connections)->toBe([]);
+
+    Exceptions::assertReported(function (InvalidIRailResponse $exception) {
+        return $exception->context()['departure_station'] === 'A'
+            && $exception->context()['destination_station'] === 'B'
+            && $exception->context()['status_code'] === 200;
+    });
+});
+
+it('skips malformed connection entries and reports them', function () {
+    Exceptions::fake();
+
+    Http::fake([
+        'api.irail.be/*' => Http::response([
+            'connection' => [
+                [
+                    'departure' => null,
+                ],
+                [
+                    'departure' => [
+                        'direction' => ['name' => 'Leuven'],
+                        'time' => '1678900000',
+                        'platform' => '1',
+                        'canceled' => '0',
+                        'delay' => '0',
+                    ],
+                ],
+            ],
+        ]),
+    ]);
+
+    $connections = $this->api->getConnections('A', 'B', 'nl', 'Test route');
+
+    expect($connections)->toHaveCount(1)
+        ->and($connections[0]['station'])->toBe('Leuven');
+
+    Exceptions::assertReported(function (InvalidIRailResponse $exception) {
+        return $exception->context()['label'] === 'Test route'
+            && $exception->context()['connection_index'] === 0;
+    });
 });

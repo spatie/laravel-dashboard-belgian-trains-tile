@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Http;
+use Spatie\BelgianTrainsTile\Exceptions\InvalidIRailResponse;
 use Spatie\BelgianTrainsTile\TrainConnectionsStore;
 
 function fakeIRailResponse(array $connections = []): void
@@ -92,4 +94,29 @@ it('handles empty connections config', function () {
     $this->artisan('dashboard:fetch-belgian-trains')->assertSuccessful();
 
     expect(TrainConnectionsStore::make()->trainConnections())->toBe([]);
+});
+
+it('reports invalid iRail responses and keeps the command successful', function () {
+    Exceptions::fake();
+
+    config()->set('dashboard.tiles.belgian_trains.connections', [
+        ['departure' => 'Antwerpen-Centraal', 'destination' => 'Bruxelles-Midi', 'label' => 'Antwerp → Brussels'],
+    ]);
+
+    Http::fake([
+        'api.irail.be/*' => Http::response('temporarily unavailable', 503),
+    ]);
+
+    $this->artisan('dashboard:fetch-belgian-trains')->assertSuccessful();
+
+    expect(TrainConnectionsStore::make()->trainConnections())->toBe([
+        ['label' => 'Antwerp → Brussels', 'trains' => []],
+    ]);
+
+    Exceptions::assertReported(function (InvalidIRailResponse $exception) {
+        return $exception->context()['label'] === 'Antwerp → Brussels'
+            && $exception->context()['departure_station'] === 'Antwerpen-Centraal'
+            && $exception->context()['destination_station'] === 'Bruxelles-Midi'
+            && $exception->context()['status_code'] === 503;
+    });
 });
