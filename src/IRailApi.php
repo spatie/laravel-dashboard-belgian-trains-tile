@@ -14,8 +14,7 @@ class IRailApi
         string $destinationStationName,
         string $locale,
         ?string $label = null,
-    ): array
-    {
+    ): array {
         $endpoint = "https://api.irail.be/connections?from={$departureStationName}&to={$destinationStationName}&format=json&lang={$locale}";
 
         $requestContext = [
