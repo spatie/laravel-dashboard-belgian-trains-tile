@@ -32,7 +32,7 @@
                                     @endif
 
                                     <span class="flex-none font-bold text-right variant-tabular">
-                                        {{ \Carbon\Carbon::createFromTimestamp($train['time'])->format('H:i') }}
+                                        {{ \Carbon\Carbon::createFromTimestamp($train['time'], config('app.timezone'))->format('H:i') }}
                                     </span>
                                 </li>
                             @endif
