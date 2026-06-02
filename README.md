@@ -1,7 +1,7 @@
 # A tile to display Belgian train connections
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-dashboard-belgian-trains-tile.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-dashboard-belgian-trains-tile)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-dashboard-calendar-tile/run-tests?label=tests)](https://github.com/spatie/laravel-dashboard-belgian-trains-tile/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![GitHub Tests Action Status](https://github.com/spatie/laravel-dashboard-belgian-trains-tile/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/laravel-dashboard-belgian-trains-tile/actions?query=workflow%3Arun-tests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-dashboard-calendar-tile.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-dashboard-belgian-trains-tile)
 
 This tile can used on the [Laravel Dashboard](https://docs.spatie.be/laravel-dashboard) to display the status of trains
