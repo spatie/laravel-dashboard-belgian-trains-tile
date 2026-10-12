@@ -15,6 +15,15 @@ class IRailApi
         string $locale,
         ?string $label = null,
     ): array {
+        return $this->getConnectionsOrNull($departureStationName, $destinationStationName, $locale, $label) ?? [];
+    }
+
+    public function getConnectionsOrNull(
+        string $departureStationName,
+        string $destinationStationName,
+        string $locale,
+        ?string $label = null,
+    ): ?array {
         $endpoint = "https://api.irail.be/connections?from={$departureStationName}&to={$destinationStationName}&format=json&lang={$locale}";
 
         $requestContext = [
@@ -34,7 +43,7 @@ class IRailApi
                 'exception_message' => $exception->getMessage(),
             ]);
 
-            return [];
+            return null;
         }
 
         if (! $response->successful()) {
@@ -47,7 +56,7 @@ class IRailApi
                 ),
             ]);
 
-            return [];
+            return null;
         }
 
         $payload = $response->json();
@@ -62,7 +71,7 @@ class IRailApi
                 ),
             ]);
 
-            return [];
+            return null;
         }
 
         if (! array_key_exists('connection', $payload)) {
@@ -75,7 +84,7 @@ class IRailApi
                 ),
             ]);
 
-            return [];
+            return null;
         }
 
         $connections = $payload['connection'];
@@ -91,14 +100,20 @@ class IRailApi
                 'connection_payload_type' => get_debug_type($connections),
             ]);
 
-            return [];
+            return null;
         }
 
-        return collect($connections)
+        $normalizedConnections = collect($connections)
             ->map(fn (mixed $connection, int $index) => $this->normalizeConnection($connection, $index, $requestContext))
             ->filter()
             ->values()
             ->toArray();
+
+        if ($connections !== [] && $normalizedConnections === []) {
+            return null;
+        }
+
+        return $normalizedConnections;
     }
 
     protected function normalizeConnection(mixed $connection, int $index, array $requestContext): ?array
