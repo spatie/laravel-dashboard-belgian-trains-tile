@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Http;
 use Spatie\BelgianTrainsTile\Exceptions\InvalidIRailResponse;
@@ -151,4 +152,17 @@ it('skips malformed connection entries and reports them', function () {
         return $exception->context()['label'] === 'Test route'
             && $exception->context()['connection_index'] === 0;
     });
+});
+
+it('distinguishes failed fetches from successful empty responses', function () {
+    Exceptions::fake();
+    Http::swap(new Factory());
+    Http::fake(fn () => Http::response('gateway timeout', 504));
+
+    expect($this->api->getConnectionsOrNull('A', 'B', 'nl'))->toBeNull();
+
+    Http::swap(new Factory());
+    Http::fake(fn () => Http::response(['connection' => []]));
+
+    expect($this->api->getConnectionsOrNull('A', 'B', 'nl'))->toBe([]);
 });

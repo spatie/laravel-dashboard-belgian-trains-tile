@@ -10,26 +10,50 @@ class FetchBelgianTrainsCommand extends Command
 
     protected $description = 'Fetch Belgian Trains Information';
 
-    public function handle(IRailApi $iRail)
+    public function handle(IRailApi $iRail): void
     {
         $this->info('Fetching trainConnections from iRail...');
 
         $locale = config('dashboard.tiles.belgian_trains.locale') ?? 'nl';
 
-        $trainConnections = collect(config('dashboard.tiles.belgian_trains.connections') ?? [])
-            ->map(function (array $connection) use ($locale, $iRail) {
-                $trains = $iRail->getConnections(
+        $store = TrainConnectionsStore::make();
+        $previousConnections = collect($store->trainConnections());
+        $configuredConnections = collect(config('dashboard.tiles.belgian_trains.connections') ?? []);
+
+        $trainConnections = $configuredConnections
+            ->map(function (array $connection) use ($locale, $iRail, $previousConnections, $configuredConnections) {
+                $trains = $iRail->getConnectionsOrNull(
                     $connection['departure'],
                     $connection['destination'],
                     $locale,
                     $connection['label'] ?? null,
                 );
 
-                return ['label' => $connection['label'], 'trains' => $trains];
+                if ($trains === null) {
+                    $previousConnection = $previousConnections->first(function (array $previous) use ($connection, $configuredConnections, $previousConnections) {
+                        if (isset($previous['departure'], $previous['destination'])) {
+                            return $previous['departure'] === $connection['departure']
+                                && $previous['destination'] === $connection['destination'];
+                        }
+
+                        return $previous['label'] === $connection['label']
+                            && $configuredConnections->where('label', $connection['label'])->count() === 1
+                            && $previousConnections->where('label', $connection['label'])->count() === 1;
+                    });
+
+                    $trains = $previousConnection['trains'] ?? [];
+                }
+
+                return [
+                    'departure' => $connection['departure'],
+                    'destination' => $connection['destination'],
+                    'label' => $connection['label'],
+                    'trains' => $trains,
+                ];
             })
             ->toArray();
 
-        TrainConnectionsStore::make()->setTrainConnections($trainConnections);
+        $store->setTrainConnections($trainConnections);
 
         $this->info('All done!');
     }
