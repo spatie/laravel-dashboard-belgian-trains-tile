@@ -6,15 +6,26 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: [8.3, 8.4]
+        php: [8.3, 8.4, 8.5]
         laravel: ['12.*']
         dependency-version: [prefer-lowest, prefer-stable]
         include:
           - laravel: 12.*
             testbench: 10.*
+          # Laravel 12's session handlers lack create_sid() on PHP 8.6.
+          - os: ubuntu-latest
+            php: 8.6
+            laravel: ^13.32
+            testbench: 11.*
+            dependency-version: prefer-lowest
+          - os: ubuntu-latest
+            php: 8.6
+            laravel: ^13.32
+            testbench: 11.*
+            dependency-version: prefer-stable
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
@@ -29,10 +40,13 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
 
+      - name: Verify PHP runtime
+        run: php -r 'echo PHP_VERSION, PHP_EOL; exit(PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION === "${{ matrix.php }}" ? 0 : 1);'
+
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
       - name: Execute tests
-        run: vendor/bin/pest
+        run: vendor/bin/pest --display-deprecations
